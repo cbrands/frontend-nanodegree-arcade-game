@@ -150,7 +150,8 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
+        //draw score before my player as I don't want to letters to draw over my character
+        drawScore();
         player.render();
     }
 

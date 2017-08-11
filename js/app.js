@@ -1,4 +1,4 @@
-DEBUG = true;  //if true draw collision boxes around player and enemy
+const DEBUG = true;  //if true draw collision boxes around player and enemy
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -47,7 +47,7 @@ Enemy.prototype.update = function(dt) {
         rect.y < rectPlayer.y + rectPlayer.height &&
         rect.height + rect.y > rectPlayer.y) {
             player.reset();
-            console.log("HIT!!");
+            score = 0;
     }
 };
 
@@ -92,13 +92,21 @@ Player.prototype.handleInput = function(key) {
         this.x -= this.xstep;
     } else if (key === 'right' && this.x < 404) {
         this.x += this.xstep;
-    } else if (key === 'up' && this.y > -10) {
-        this.y -= this.ystep;
     } else if (key === 'down' && this.y < 380) {
         this.y += this.ystep; 
+    } else if (key === 'up') {
+        if (this.y > -10) {
+            this.y -= this.ystep;
+        } else {
+            score++;
+            if (score > bestScore) {
+                bestScore = score;
+            }
+            this.reset();
+        }
     }
 console.log(this.x, this.y);
-    //console.log(ctx.canvas.width, ctx.canvas.height);
+
 
 };
 
@@ -106,6 +114,16 @@ Player.prototype.reset = function () {
     this.x = 202;
     this.y = 400;
 };
+
+var score = 0;
+var bestScore = 0;
+
+function drawScore() {
+    ctx.font = "30px sans-serif";
+    ctx.fillStyle = "white";
+    ctx.fillText("Score: "+score, 10, 574);
+    ctx.fillText("Best score: "+bestScore, 10, 534);
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
