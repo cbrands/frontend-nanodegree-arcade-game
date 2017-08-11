@@ -9,9 +9,13 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = -100;
-    this.y = 225;
-    this.width = 101;
-    this.height = 171;
+    this.y = 65;  //230, 145, 65
+    //there is a lot of tranparentie around the player image
+    //the values below represent the actual image
+    this.imageOffsetX = 2;
+    this.imageOffsetY = 80;
+    this.imageWidth = 97;
+    this.imageHeight = 63;
     this.speed = this.newSpeed();
     console.log(this.speed);
 };
@@ -36,13 +40,22 @@ Enemy.prototype.update = function(dt) {
         this.speed = this.newSpeed();
         console.log(this.speed);
     }
+    var rect = {x: this.x + this.imageOffsetX, y: this.y + this.imageOffsetY, width: this.imageWidth, height: this.imageHeight};
+    var rectPlayer = {x: player.x + player.imageOffsetX, y: player.y + player.imageOffsetY, width: player.imageWidth, height: player.imageHeight};
+    if (rect.x < rectPlayer.x + rectPlayer.width &&
+        rect.x + rect.width > rectPlayer.x &&
+        rect.y < rectPlayer.y + rectPlayer.height &&
+        rect.height + rect.y > rectPlayer.y) {
+            player.reset();
+            console.log("HIT!!");
+    }
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if (DEBUG) {
-         ctx.strokeRect(this.x, this.y, this.width, this.height);
+        ctx.strokeRect(this.x + this.imageOffsetX, this.y + this.imageOffsetY, this.imageWidth, this.imageHeight);
     }
 };
 
@@ -52,20 +65,25 @@ Enemy.prototype.render = function() {
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 202;
-    this.y = 380;
-    this.width = 101;
-    this.height = 171;
+    this.y = 400;
+    
+    //there is a lot of tranparentie around the player image
+    //the values below represent the actual image
+    this.imageOffsetX = 20;
+    this.imageOffsetY = 63;
+    this.imageWidth = 62;
+    this.imageHeight = 75;
 };
 
 Player.prototype.update = function() {
     this.xstep = 101;
-    this.ystep = 80;  
+    this.ystep = 82;  
 };
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if(DEBUG){
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
+        ctx.strokeRect(this.x + this.imageOffsetX, this.y + this.imageOffsetY, this.imageWidth, this.imageHeight);
     }
 };
 
@@ -74,7 +92,7 @@ Player.prototype.handleInput = function(key) {
         this.x -= this.xstep;
     } else if (key === 'right' && this.x < 404) {
         this.x += this.xstep;
-    } else if (key === 'up' && this.y > -20) {
+    } else if (key === 'up' && this.y > -10) {
         this.y -= this.ystep;
     } else if (key === 'down' && this.y < 380) {
         this.y += this.ystep; 
@@ -84,12 +102,23 @@ console.log(this.x, this.y);
 
 };
 
+Player.prototype.reset = function () {
+    this.x = 202;
+    this.y = 400;
+};
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var enemy1 = new Enemy();
 var allEnemies = [enemy1];
 var player = new Player();
+
+function detectCollision() {
+    collision = true;
+    
+    return collison;
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
