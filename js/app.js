@@ -1,3 +1,5 @@
+DEBUG = true;  //if true draw collision boxes around player and enemy
+
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -7,7 +9,17 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = -100;
-    this.y = 200;
+    this.y = 225;
+    this.width = 101;
+    this.height = 171;
+    this.speed = this.newSpeed();
+    console.log(this.speed);
+};
+
+Enemy.prototype.newSpeed = function() {
+    var min = 200;
+    var max = 400;
+    return Math.floor(Math.random() * (max - min)) + min;
 };
 
 // Update the enemy's position, required method for game
@@ -16,17 +28,22 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    var movement = 200 * dt;
+    var movement = this.speed * dt;
     if(this.x < 505) {
         this.x += movement;
     } else {
         this.x = -100;
+        this.speed = this.newSpeed();
+        console.log(this.speed);
     }
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    if (DEBUG) {
+         ctx.strokeRect(this.x, this.y, this.width, this.height);
+    }
 };
 
 // Now write your own player class
@@ -35,7 +52,9 @@ Enemy.prototype.render = function() {
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 202;
-    this.y = 380;    
+    this.y = 380;
+    this.width = 101;
+    this.height = 171;
 };
 
 Player.prototype.update = function() {
@@ -45,6 +64,9 @@ Player.prototype.update = function() {
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    if(DEBUG){
+        ctx.strokeRect(this.x, this.y, this.width, this.height);
+    }
 };
 
 Player.prototype.handleInput = function(key) {
