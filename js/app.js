@@ -29,9 +29,9 @@ Enemy.prototype.randomY = function() {
 };
 
 Enemy.prototype.newSpeed = function() {
-    var min = 200;
-    var max = 400;
-    return Math.floor(Math.random() * (max - min)) + min;
+    var min = 200  + (20 * score);
+    var max = 400 + (40 * score);
+    return (Math.floor(Math.random() * (max - min)) + min);
 };
 
 // Update the enemy's position, required method for game
@@ -47,8 +47,9 @@ Enemy.prototype.update = function(dt) {
         this.x = -100;
         this.y = this.randomY();
         this.speed = this.newSpeed();
-        console.log(this.speed);
     }
+    
+    //check for collision between enemy and player
     var rect = {
         x: this.x + this.imageOffsetX,
         y: this.y + this.imageOffsetY,
@@ -65,6 +66,7 @@ Enemy.prototype.update = function(dt) {
         rect.height + rect.y > rectPlayer.y) {
             player.reset();
             score = 0;
+            allEnemies=[new Enemy(), new Enemy()];
     }
 };
 
@@ -127,12 +129,12 @@ Player.prototype.handleInput = function(key) {
             if (score > bestScore) {
                 bestScore = score;
             }
+            if (score % 5 === 0){
+                allEnemies.push(new Enemy());
+            }
             this.reset();
         }
     }
-console.log(this.x, this.y);
-
-
 };
 
 Player.prototype.reset = function () {
@@ -153,15 +155,8 @@ function drawScore() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var enemy1 = new Enemy();
-var allEnemies = [enemy1];
+var allEnemies = [new Enemy(), new Enemy()];
 var player = new Player();
-
-function detectCollision() {
-    collision = true;
-    
-    return collison;
-}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
