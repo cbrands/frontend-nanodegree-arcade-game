@@ -9,7 +9,7 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = -100;
-    this.y = 65;  //230, 145, 65
+    this.y = this.randomY();
     //there is a lot of tranparentie around the player image
     //the values below represent the actual image
     this.imageOffsetX = 2;
@@ -18,6 +18,14 @@ var Enemy = function() {
     this.imageHeight = 63;
     this.speed = this.newSpeed();
     console.log(this.speed);
+};
+
+Enemy.prototype.randomY = function() {
+    var min = 0;
+    var max = 3;
+    var rand = Math.floor(Math.random() * (max - min)) + min;
+    var yOptions = [65, 145 , 230];
+    return yOptions[rand]; 
 };
 
 Enemy.prototype.newSpeed = function() {
@@ -37,11 +45,20 @@ Enemy.prototype.update = function(dt) {
         this.x += movement;
     } else {
         this.x = -100;
+        this.y = this.randomY();
         this.speed = this.newSpeed();
         console.log(this.speed);
     }
-    var rect = {x: this.x + this.imageOffsetX, y: this.y + this.imageOffsetY, width: this.imageWidth, height: this.imageHeight};
-    var rectPlayer = {x: player.x + player.imageOffsetX, y: player.y + player.imageOffsetY, width: player.imageWidth, height: player.imageHeight};
+    var rect = {
+        x: this.x + this.imageOffsetX,
+        y: this.y + this.imageOffsetY,
+        width: this.imageWidth,
+        height: this.imageHeight};
+    var rectPlayer = {
+        x: player.x + player.imageOffsetX,
+        y: player.y + player.imageOffsetY,
+        width: player.imageWidth,
+        height: player.imageHeight};
     if (rect.x < rectPlayer.x + rectPlayer.width &&
         rect.x + rect.width > rectPlayer.x &&
         rect.y < rectPlayer.y + rectPlayer.height &&
@@ -55,7 +72,11 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if (DEBUG) {
-        ctx.strokeRect(this.x + this.imageOffsetX, this.y + this.imageOffsetY, this.imageWidth, this.imageHeight);
+        ctx.strokeRect(
+            this.x + this.imageOffsetX,
+            this.y + this.imageOffsetY,
+            this.imageWidth,
+            this.imageHeight);
     }
 };
 
@@ -83,7 +104,11 @@ Player.prototype.update = function() {
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if(DEBUG){
-        ctx.strokeRect(this.x + this.imageOffsetX, this.y + this.imageOffsetY, this.imageWidth, this.imageHeight);
+        ctx.strokeRect(
+            this.x + this.imageOffsetX,
+            this.y + this.imageOffsetY,
+            this.imageWidth,
+            this.imageHeight);
     }
 };
 
