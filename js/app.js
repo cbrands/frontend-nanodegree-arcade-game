@@ -31,19 +31,34 @@ var Player = function() {
 };
 
 Player.prototype.update = function() {
-    this.xmove = 101;
-    this.ymove = 80;  
+    this.xstep = 101;
+    this.ystep = 80;  
 };
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Player.prototype.handleInput = function(key) {
+    if (key === 'left' && this.x > 0) {
+        this.x -= this.xstep;
+    } else if (key === 'right' && this.x < (4 * this.xstep) {
+        this.x += this.xstep;
+    } else if (key === 'up' && this.y > -20) {
+        this.y -= this.ystep;
+    } else if (key === 'down' && this.y < 380) {
+        this.y += this.ystep; 
+    }
+console.log(this.x, this.y);
+    //console.log(ctx.canvas.width, ctx.canvas.height);
+
+};
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-let allEnemies = [];
-let player = new Player();
+var allEnemies = [];
+var player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
