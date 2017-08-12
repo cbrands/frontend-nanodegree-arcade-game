@@ -1,33 +1,31 @@
-const DEBUG = true;  //if true draw collision boxes around player and enemy
+//if true draw collision boxes around player and enemy
+const DEBUG = false;
 
 // Enemies our player must avoid
 var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = -100;
     this.y = this.randomY();
-    //there is a lot of tranparentie around the player image
+    //there is a lot of tranparentie around the enemy image
     //the values below represent the actual image
     this.imageOffsetX = 2;
     this.imageOffsetY = 80;
     this.imageWidth = 97;
     this.imageHeight = 63;
     this.speed = this.newSpeed();
-    console.log(this.speed);
 };
 
+//The enemy can run on one of three stone tracks
 Enemy.prototype.randomY = function() {
     var min = 0;
     var max = 3;
     var rand = Math.floor(Math.random() * (max - min)) + min;
     var yOptions = [65, 145 , 230];
-    return yOptions[rand]; 
+    return yOptions[rand];
 };
 
+//Select a random speed between a minimum and a maximum value.
+//As the score increases so does these minimum and maximum values
 Enemy.prototype.newSpeed = function() {
     var min = 200  + (20 * score);
     var max = 400 + (40 * score);
@@ -70,7 +68,7 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
-// Draw the enemy on the screen, required method for game
+//Draw the enemy and if DEBUG is true also draw the collision box
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if (DEBUG) {
@@ -89,7 +87,9 @@ var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 202;
     this.y = 400;
-    
+    this.xstep = 101;
+    this.ystep = 82;
+
     //there is a lot of tranparentie around the player image
     //the values below represent the actual image
     this.imageOffsetX = 20;
@@ -99,10 +99,10 @@ var Player = function() {
 };
 
 Player.prototype.update = function() {
-    this.xstep = 101;
-    this.ystep = 82;  
+    //Don't actually need this function as the player only gets updated on handle input
 };
 
+//Draw the player and if DEBUG is true also draw the collision box
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if(DEBUG){
@@ -120,11 +120,13 @@ Player.prototype.handleInput = function(key) {
     } else if (key === 'right' && this.x < 404) {
         this.x += this.xstep;
     } else if (key === 'down' && this.y < 380) {
-        this.y += this.ystep; 
+        this.y += this.ystep;
     } else if (key === 'up') {
         if (this.y > -10) {
             this.y -= this.ystep;
         } else {
+            //The other side is reached increse score and bring the player back to the beginning
+            //If the score is divisable by 5 then add an enemy
             score++;
             if (score > bestScore) {
                 bestScore = score;
@@ -137,6 +139,7 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
+//Go back to the beginning
 Player.prototype.reset = function () {
     this.x = 202;
     this.y = 400;
