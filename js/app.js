@@ -20,14 +20,14 @@ Enemy.prototype.randomY = function() {
     var min = 0;
     var max = 3;
     var rand = Math.floor(Math.random() * (max - min)) + min;
-    var yOptions = [65, 145 , 230];
+    var yOptions = [65, 145, 230];
     return yOptions[rand];
 };
 
 //Select a random speed between a minimum and a maximum value.
 //As the score increases so does these minimum and maximum values
 Enemy.prototype.newSpeed = function() {
-    var min = 200  + (20 * score);
+    var min = 200 + (20 * score);
     var max = 400 + (40 * score);
     return (Math.floor(Math.random() * (max - min)) + min);
 };
@@ -39,32 +39,34 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     var movement = this.speed * dt;
-    if(this.x < 505) {
+    if (this.x < 505) {
         this.x += movement;
     } else {
         this.x = -100;
         this.y = this.randomY();
         this.speed = this.newSpeed();
     }
-    
+
     //check for collision between enemy and player
     var rect = {
         x: this.x + this.imageOffsetX,
         y: this.y + this.imageOffsetY,
         width: this.imageWidth,
-        height: this.imageHeight};
+        height: this.imageHeight
+    };
     var rectPlayer = {
         x: player.x + player.imageOffsetX,
         y: player.y + player.imageOffsetY,
         width: player.imageWidth,
-        height: player.imageHeight};
+        height: player.imageHeight
+    };
     if (rect.x < rectPlayer.x + rectPlayer.width &&
         rect.x + rect.width > rectPlayer.x &&
         rect.y < rectPlayer.y + rectPlayer.height &&
         rect.height + rect.y > rectPlayer.y) {
-            player.reset();
-            score = 0;
-            allEnemies=[new Enemy(), new Enemy()];
+        player.reset();
+        score = 0;
+        allEnemies = [new Enemy(), new Enemy()];
     }
 };
 
@@ -105,7 +107,7 @@ Player.prototype.update = function() {
 //Draw the player and if DEBUG is true also draw the collision box
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    if(DEBUG){
+    if (DEBUG) {
         ctx.strokeRect(
             this.x + this.imageOffsetX,
             this.y + this.imageOffsetY,
@@ -131,7 +133,7 @@ Player.prototype.handleInput = function(key) {
             if (score > bestScore) {
                 bestScore = score;
             }
-            if (score % 5 === 0){
+            if (score % 5 === 0) {
                 allEnemies.push(new Enemy());
             }
             this.reset();
@@ -140,7 +142,7 @@ Player.prototype.handleInput = function(key) {
 };
 
 //Go back to the beginning
-Player.prototype.reset = function () {
+Player.prototype.reset = function() {
     this.x = 202;
     this.y = 400;
 };
@@ -151,8 +153,8 @@ var bestScore = 0;
 function drawScore() {
     ctx.font = "30px sans-serif";
     ctx.fillStyle = "white";
-    ctx.fillText("Score: "+score, 10, 574);
-    ctx.fillText("Best score: "+bestScore, 10, 534);
+    ctx.fillText("Score: " + score, 10, 574);
+    ctx.fillText("Best score: " + bestScore, 10, 534);
 }
 
 // Now instantiate your objects.
